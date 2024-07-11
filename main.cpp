@@ -5,7 +5,7 @@ using namespace std;
 class GameOfLife{
 public:
     vector<vector<int>> random_state(int width, int height){
-        vector<vector<int>> state(width, vector<int> (height, 0));
+        vector<vector<int>> state = dead_state(width, height);
 
         for(int i=0; i<width; i++){
             for(int j=0; j<height; j++){
@@ -19,21 +19,43 @@ public:
         return vector<vector<int>> (width, vector<int> (height, 0));
     }
 
+    vector<vector<int>> next_board_state(vector<vector<int>> state){
+        for(int i=0;i<state[0].size();i++){
+            for(int j=0;j<state.size();j++){
+                int sum = state[i-1][j-1] + state[i-1][j] + state[i-1][j+1] + state[i][j-1] +state[i][j+1] +state[i+1][j-1] + state[i+1][j]+ state[i+1][j+1];
+
+
+                if(sum<=1) state[i][j] = 0;
+                else if(sum>3) state[i][j] = 0;
+                else if(sum==2) state[i][j] = 1;
+            }
+        }
+        return state;
+    }
+
+    void render(vector<vector<int>> state){
+        // int width = 20;
+        // int height = 30;
+        // vector<vector<int>> state = random_state(width, height);
+        char c;
+        for(int i=0; i<state[0].size(); i++){
+            for(int j=0; j<state.size(); j++){
+                if(state[i][j])c='*';
+                else c='.';
+                cout << c << " ";
+            }
+            cout << endl;
+        }
+    }
+
 };
 
 int main(){
         GameOfLife game;
-        int width = 10;
-        int height = 10;
-        vector<vector<int>> state = game.random_state(width, height);
-        vector<vector<int>> new_state = game.dead_state(width, height);
-
-        for(int i=0; i<width; i++){
-            for(int j=0; j<height; j++){
-                cout << state[i][j] << " ";
-            }
-            cout << endl;
-        }
+        vector<vector<int>> state = game.random_state(10,10);
+        game.render(state);
+        cout<<"##################"<<endl;
+        game.render(game.next_board_state(state));
 
         return 0;
 }
