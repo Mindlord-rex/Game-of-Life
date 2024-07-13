@@ -20,10 +20,12 @@ vector<vector<int>> GameOfLife::dead_state(int width, int height){
 }
 
 vector<vector<int>> GameOfLife::next_board_state(vector<vector<int>> state){
+    vector<vector<int>> new_state = dead_state(state[0].size(), state.size());
     for(int i=0;i<state[0].size();i++){
         for(int j=0;j<state.size();j++){
             int sum = 0;
 
+            // wrap around in a circle
             if(i!=0) sum+= state[i-1][j];
             if(j!=0) sum+= state[i][j-1];
             if(i!=0 && j!=0) sum+= state[i-1][j-1];
@@ -33,12 +35,12 @@ vector<vector<int>> GameOfLife::next_board_state(vector<vector<int>> state){
             if(i!=(state[0].size()-1)) sum+= state[i+1][j];
             if(i!=(state[0].size()-1) && j!=(state.size()-1)) sum+= state[i+1][j+1];
 
-            if(sum<=1) state[i][j] = 0;
-            else if(sum>3) state[i][j] = 0;
-            else if(sum==3) state[i][j] = 1;
+            if(sum<=1) new_state[i][j] = 0;
+            else if(sum>3) new_state[i][j] = 0;
+            else if(sum==3) new_state[i][j] = 1;
         }
     }
-    return state;
+    return new_state;
 }
 
 void GameOfLife::render(vector<vector<int>> state){

@@ -1,6 +1,12 @@
 #include "main.h"
 using namespace std;
 
+//g++ -Wall -Wextra -g3 test.cpp main.cpp -o output\main.exe
+
+//cd output
+//.\main.exe
+
+
 int main(){
         GameOfLife game;
         
