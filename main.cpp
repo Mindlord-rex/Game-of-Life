@@ -35,6 +35,12 @@ vector<vector<int>> GameOfLife::next_board_state(vector<vector<int>> state){
             if(i!=(state[0].size()-1)) sum+= state[i+1][j];
             if(i!=(state[0].size()-1) && j!=(state.size()-1)) sum+= state[i+1][j+1];
 
+            // if(i==0) sum += state[state.size()-1][j];
+            // if(j==0) sum += state[i][state[0].size()-1];
+            // if(i==0 && j==0) sum += state[state.size()-1][state[0].size()-1];
+            // if(i==state.size()-1) sum += state[0][j];
+            // if(j==state[0].size()-1) sum += state[i][0];
+
             if(sum<=1) new_state[i][j] = 0;
             else if(sum>3) new_state[i][j] = 0;
             else if(sum==3) new_state[i][j] = 1;
@@ -50,7 +56,7 @@ void GameOfLife::render(vector<vector<int>> state){
     char c;
     for(int i=0; i<state[0].size(); i++){
         for(int j=0; j<state.size(); j++){
-            if(state[i][j])c='*';
+            if(state[i][j])c='#';
             else c='.';
             cout << c << " ";
         }
@@ -62,9 +68,14 @@ void GameOfLife::render(vector<vector<int>> state){
 int main(){
         GameOfLife game;
         vector<vector<int>> state = game.random_state(10,10);
-        game.render(state);
-        cout<<"##################"<<endl;
-        game.render(game.next_board_state(state));
+        int i=0;
+        while(i<5){
+            state = game.next_board_state(state);
+            game.render(state);
+            cout<<"##################"<<endl;
+            i++;
+        }
+        
 
         return 0;
 }
