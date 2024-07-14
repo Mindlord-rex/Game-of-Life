@@ -9,6 +9,7 @@ public:
     vector<vector<int>> random_state(int width, int height);
     vector<vector<int>> dead_state(int width, int height);
     vector<vector<int>> next_board_state(vector<vector<int>> state);
+    vector<vector<int>> load_board_state(string path);
     void render(vector<vector<int>> state);
 };
 
