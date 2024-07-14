@@ -19,31 +19,36 @@ vector<vector<int>> GameOfLife::dead_state(int width, int height){
     return vector<vector<int>> (width, vector<int> (height, 0));
 }
 
+int next_cell_value(int x, int y, vector<vector<int>> state){
+    int width = state[0].size();
+    int height = state.size();
+    int sum = 0;
+
+    for(int i=x-1; i<(x+1)+1;i++){
+        if(i<0 || i>=width) continue;
+
+        for(int j=y-1; j<(y+1)+1;j++){
+            if(j<0 || j>=height) continue;
+            if(i==x && j==y) continue;
+            if(state[i][j]==1) sum += 1;
+        }
+    }
+
+    if(state[x][y]==1){
+        if(sum<=1) return 0;
+        else if(sum<=3) return 1;
+        else return 0;
+    }else{
+        if(sum==3) return 1;
+        else return 0;
+    }
+}
+
 vector<vector<int>> GameOfLife::next_board_state(vector<vector<int>> state){
     vector<vector<int>> new_state = dead_state(state[0].size(), state.size());
     for(int i=0;i<state[0].size();i++){
         for(int j=0;j<state.size();j++){
-            int sum = 0;
-
-            // wrap around in a circle
-            if(i!=0) sum+= state[i-1][j];
-            if(j!=0) sum+= state[i][j-1];
-            if(i!=0 && j!=0) sum+= state[i-1][j-1];
-            if(i!=0 && j!=(state.size()-1)) sum += state[i-1][j+1];
-            if(j!=(state.size()-1)) sum += state[i][j+1];
-            if(i!=(state[0].size()-1) && j!=0) sum+= state[i+1][j-1];
-            if(i!=(state[0].size()-1)) sum+= state[i+1][j];
-            if(i!=(state[0].size()-1) && j!=(state.size()-1)) sum+= state[i+1][j+1];
-
-            if(i==0) sum += state[state.size()-1][j];
-            if(j==0) sum += state[i][state[0].size()-1];
-            if(i==0 && j==0) sum += state[state.size()-1][state[0].size()-1];
-            if(i==state.size()-1) sum += state[0][j];
-            if(j==state[0].size()-1) sum += state[i][0];
-
-            if(sum<=1) new_state[i][j] = 0;
-            else if(sum>3) new_state[i][j] = 0;
-            else if(sum==3) new_state[i][j] = 1;
+            new_state[i][j] = next_cell_value(i, j, state);
         }
     }
     return new_state;
@@ -86,8 +91,10 @@ vector<vector<int>> GameOfLife::load_board_state(string path){
 int main(){
         GameOfLife game;
 
-        vector<vector<int>> state = game.random_state(10,10);
+        vector<vector<int>> state = game.load_board_state("D:\\code\\Projects\\Game of Life\\toad.txt");
         int i=0;
+        game.render(state);
+        cout<<"################"<<endl;
         while(i<5){
             state = game.next_board_state(state);
             game.render(state);
