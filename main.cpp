@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 #include "main.h"
+#include <unistd.h>
 
 using namespace std;
 
@@ -87,22 +88,22 @@ vector<vector<int>> GameOfLife::load_board_state(string path){
     return board_state ;
 }
 
+void GameOfLife::run_forever(vector<vector<int>> state){
+    
+    while(true){
+        render(state);
+        cout<<"##################"<<endl;
+        state = next_board_state(state);
+        sleep(0.03);
+    }
+}
+
 
 int main(){
         GameOfLife game;
 
         vector<vector<int>> state = game.load_board_state("D:\\code\\Projects\\Game of Life\\toad.txt");
-        int i=0;
-        game.render(state);
-        cout<<"################"<<endl;
-        while(i<5){
-            state = game.next_board_state(state);
-            game.render(state);
-            cout<<"##################"<<endl;
-            i++;
-        }
-
-        ;
+        game.run_forever(state);
         
 
         return 0;
